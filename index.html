@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111310">
+  <meta name="description" content="크라임씬 추리를 위한 정답 입력 웹앱">
+  <title>CASE CLOSED — 크라임씬 정답 판정</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+    :root{color-scheme:dark;--bg:#111310;--panel:#191b17;--line:#34362e;--muted:#919386;--paper:#e8e6d9;--lime:#c3ed68;--red:#ef6658;--mono:'DM Mono',monospace;--sans:'Noto Sans KR',sans-serif}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--paper);font-family:var(--sans);min-height:100vh;display:grid;place-items:center;padding:28px 18px;position:relative;overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent 49.9%,#ffffff05 50%,transparent 50.1%),linear-gradient(#ffffff05 1px,transparent 1px);background-size:100% 100%,100% 44px;mask-image:linear-gradient(transparent,#000 15%,#000 85%,transparent)}
+    .wrap{width:min(100%,580px);position:relative}.topline{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:0 0 15px;margin-bottom:27px;color:var(--muted);font:11px var(--mono);letter-spacing:.12em}.signal{display:inline-flex;align-items:center;gap:8px}.signal:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px #c3ed6880}.stamp{color:var(--lime)}
+    header{margin-bottom:28px}.eyebrow{font:11px var(--mono);letter-spacing:.22em;color:var(--lime);margin:0 0 10px}.title{font-size:clamp(35px,9vw,54px);line-height:1.05;letter-spacing:-.06em;margin:0;font-weight:800}.title em{color:var(--lime);font-style:normal}.sub{margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.7}
+    .card{background:var(--panel);border:1px solid var(--line);padding:clamp(20px,6vw,32px);position:relative;box-shadow:0 20px 70px #0005}.card:before,.card:after{content:"";position:absolute;width:8px;height:8px;border-color:var(--lime);border-style:solid}.card:before{top:-1px;left:-1px;border-width:1px 0 0 1px}.card:after{right:-1px;bottom:-1px;border-width:0 1px 1px 0}.section-label{display:flex;align-items:center;gap:10px;color:var(--muted);font:11px var(--mono);letter-spacing:.14em;margin:0 0 22px}.section-label b{color:var(--lime);font-weight:400}.field{margin:0 0 20px}.field label{display:block;font-size:13px;font-weight:600;margin-bottom:9px}.hint{color:var(--muted);font-weight:400;margin-left:6px;font-size:11px}.input-wrap{position:relative}input{font:inherit;color:var(--paper);width:100%;border:1px solid #41433a;background:#11130f;padding:15px 16px;outline:none;border-radius:2px;transition:border-color .15s}input:focus{border-color:var(--lime)}input::placeholder{color:#66685e}.input-wrap input{padding-right:50px}.toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--muted);font:10px var(--mono);cursor:pointer;padding:8px}.attempt-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px}.stepper{display:flex;align-items:center;border:1px solid #41433a;background:#11130f}.stepper button{width:44px;height:44px;color:var(--lime);font-size:20px;border:0;background:transparent;cursor:pointer}.stepper button:hover{background:#ffffff0a}.stepper input{width:52px;text-align:center;padding:8px 0;border:0;background:transparent;font:16px var(--mono);appearance:textfield}.stepper input::-webkit-inner-spin-button{-webkit-appearance:none}.count-note{font:11px var(--mono);color:var(--muted)}
+    .primary{width:100%;border:0;background:var(--lime);color:#11130f;padding:16px;font:700 14px var(--sans);letter-spacing:.04em;cursor:pointer;transition:transform .15s,background .15s}.primary:hover{background:#d4f68c;transform:translateY(-1px)}.primary:active{transform:translateY(0)}button:focus-visible,input:focus-visible{outline:2px solid var(--lime);outline-offset:2px}.divider{height:1px;background:var(--line);margin:23px 0}.privacy{font-size:11px;line-height:1.7;color:var(--muted);margin:16px 0 0}.privacy span{color:var(--lime)}
+    .game-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}.badge{border:1px solid #41433a;padding:7px 9px;color:var(--lime);font:10px var(--mono);letter-spacing:.1em}.remaining{font:12px var(--mono);color:var(--muted)}.remaining strong{color:var(--paper);font-size:16px}.answer-entry{display:flex;gap:8px}.answer-entry input{min-width:0}.answer-entry button{border:1px solid var(--lime);background:var(--lime);color:#11130f;padding:0 18px;font:700 13px var(--sans);cursor:pointer;white-space:nowrap}.status{min-height:25px;margin:12px 0 0;font-size:13px;font-weight:600}.status.good{color:var(--lime)}.status.bad{color:var(--red)}.status.neutral{color:var(--muted)}.attempts{display:flex;gap:7px;margin-top:18px}.dot{width:8px;height:8px;background:#45473d;border-radius:50%}.dot.used{background:var(--red)}.actions{display:flex;justify-content:space-between;align-items:center;margin-top:24px}.text-button{border:0;background:none;color:var(--muted);font:11px var(--mono);cursor:pointer;text-decoration:underline;text-underline-offset:4px}.text-button:hover{color:var(--paper)}.result{text-align:center;padding:8px 0 4px}.result-mark{font:11px var(--mono);letter-spacing:.18em;color:var(--lime);margin:0 0 12px}.result h2{font-size:27px;margin:0 0 8px;letter-spacing:-.04em}.result p{color:var(--muted);font-size:13px;line-height:1.7;margin:0}.result .primary{margin-top:25px}.hidden{display:none!important}footer{display:flex;justify-content:space-between;color:#73756a;font:10px var(--mono);padding:16px 2px 0;letter-spacing:.08em}
+    @media(max-width:420px){.topline{font-size:9px}.answer-entry button{padding:0 12px}.attempt-row{gap:8px}.count-note{font-size:10px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="topline"><span class="signal">INVESTIGATION SYSTEM</span><span class="stamp">● LIVE CASE</span></div>
+    <header><p class="eyebrow">CRIME SCENE / INTERROGATION</p><h1 class="title">CASE<br><em>CLOSED?</em></h1><p class="sub">사건의 진실을 밝혀내세요.<br>용의자의 답을 입력하고 판정을 확인합니다.</p></header>
+    <section class="card" aria-live="polite">
+      <div id="setup">
+        <p class="section-label"><b>01</b> &nbsp; CASE CONFIGURATION</p>
+        <form id="setupForm">
+          <div class="field"><label for="secret">정답 설정 <span class="hint">시작 후에는 수정할 수 없습니다</span></label><div class="input-wrap"><input id="secret" type="password" autocomplete="off" placeholder="정답을 입력하세요" required><button class="toggle" type="button" id="toggleSecret" aria-label="정답 표시">SHOW</button></div></div>
+          <div class="field"><div class="attempt-row"><div><label for="limit">응답 가능 횟수</label><div class="count-note">NUMBER OF ATTEMPTS</div></div><div class="stepper"><button type="button" id="minus" aria-label="횟수 줄이기">−</button><input id="limit" type="number" min="1" max="99" value="3" aria-label="응답 가능 횟수"><button type="button" id="plus" aria-label="횟수 늘리기">+</button></div></div></div>
+          <div class="divider"></div><button class="primary" type="submit">사건 시작하기 <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="privacy"><span>●</span> 정답은 이 브라우저에서만 사용됩니다. 페이지를 새로고침하면 설정이 초기화됩니다.</p>
+      </div>
+      <div id="game" class="hidden">
+        <div class="game-head"><span class="badge">CASE IN PROGRESS</span><span class="remaining">남은 횟수 <strong id="leftCount">3</strong></span></div>
+        <p class="section-label"><b>02</b> &nbsp; SUBMIT YOUR ANSWER</p>
+        <form id="guessForm" class="answer-entry"><input id="guess" autocomplete="off" placeholder="정답을 입력하세요" aria-label="정답 입력" required><button type="submit">판정하기</button></form>
+        <p id="status" class="status neutral" role="status">추리를 마쳤다면 답을 제출하세요.</p><div class="attempts" id="dots" aria-label="남은 응답 횟수"></div>
+        <div id="result" class="result hidden"><div class="divider"></div><p class="result-mark" id="resultMark">CASE SOLVED</p><h2 id="resultTitle">사건 해결</h2><p id="resultText"></p><button class="primary" id="again" type="button">새 사건 설정하기 <span aria-hidden="true">→</span></button></div>
+        <div class="actions"><span class="count-note">CASE FILE · 001</span><button class="text-button" id="cancel" type="button">사건 초기화</button></div>
+      </div>
+    </section>
+    <footer><span>FIELD UNIT / 01</span><span>TRUTH LEAVES A TRACE</span></footer>
+  </main>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let answer = '', maxAttempts = 3, attemptsLeft = 3, finished = false;
+    $('toggleSecret').addEventListener('click', () => { const input = $('secret'); const show = input.type === 'password'; input.type = show ? 'text' : 'password'; $('toggleSecret').textContent = show ? 'HIDE' : 'SHOW'; });
+    $('minus').addEventListener('click', () => $('limit').value = Math.max(1, (Number($('limit').value) || 1) - 1));
+    $('plus').addEventListener('click', () => $('limit').value = Math.min(99, (Number($('limit').value) || 1) + 1));
+    $('limit').addEventListener('change', () => $('limit').value = Math.min(99, Math.max(1, Number($('limit').value) || 1)));
+    $('setupForm').addEventListener('submit', (event) => {
+      event.preventDefault(); answer = $('secret').value.trim(); maxAttempts = Math.min(99, Math.max(1, Number($('limit').value) || 1));
+      if (!answer) return $('secret').focus(); attemptsLeft = maxAttempts; finished = false;
+      $('leftCount').textContent = attemptsLeft; $('status').textContent = '추리를 마쳤다면 답을 제출하세요.'; $('status').className = 'status neutral'; $('result').classList.add('hidden'); $('guessForm').classList.remove('hidden'); $('game').classList.remove('hidden'); $('setup').classList.add('hidden'); renderDots(); $('guess').focus();
+    });
+    $('guessForm').addEventListener('submit', (event) => {
+      event.preventDefault(); if (finished) return; const guess = $('guess').value.trim(); if (!guess) return;
+      if (guess.localeCompare(answer, 'ko', {sensitivity:'accent'}) === 0) { finish(true); return; }
+      attemptsLeft--; $('leftCount').textContent = attemptsLeft; renderDots(); $('guess').value = '';
+      if (attemptsLeft <= 0) finish(false); else { $('status').textContent = `정답이 아닙니다. 다시 추리해보세요. (${attemptsLeft}회 남음)`; $('status').className = 'status bad'; $('guess').focus(); }
+    });
+    function renderDots(){ $('dots').replaceChildren(...Array.from({length:maxAttempts},(_,i)=>{const dot=document.createElement('span');dot.className='dot'+(i>=attemptsLeft?' used':'');return dot;})); }
+    function finish(solved){ finished=true; $('guessForm').classList.add('hidden'); $('status').textContent=''; $('dots').classList.add('hidden'); $('result').classList.remove('hidden'); $('resultMark').textContent=solved?'CASE SOLVED':'CASE UNSOLVED'; $('resultTitle').textContent=solved?'사건 해결':'수사 종료'; $('resultText').textContent=solved?'정답입니다. 당신은 사건의 진실을 밝혀냈습니다.':`응답 기회를 모두 사용했습니다. 정답은 “${answer}”입니다.`; $('resultMark').style.color=solved?'var(--lime)':'var(--red)'; }
+    function reset(){answer='';finished=false;$('setup').classList.remove('hidden');$('game').classList.add('hidden');$('secret').value='';$('secret').type='password';$('toggleSecret').textContent='SHOW';$('limit').value='3';$('dots').classList.remove('hidden');$('guess').value='';}
+    $('cancel').addEventListener('click', reset); $('again').addEventListener('click', reset);
+  </script>
+</body>
+</html>
