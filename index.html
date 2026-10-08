@@ -62,11 +62,12 @@
       if (attemptsLeft <= 0) finish(false); else { $('status').textContent = `정답이 아닙니다. 다시 추리해보세요. (${attemptsLeft}회 남음)`; $('status').className = 'status bad'; $('guess').focus(); }
     });
     function renderDots(){ $('dots').replaceChildren(...Array.from({length:maxAttempts},(_,i)=>{const dot=document.createElement('span');dot.className='dot'+(i>=attemptsLeft?' used':'');return dot;})); }
-    function finish(solved){ finished=true; $('guessForm').classList.add('hidden'); $('status').textContent=''; $('dots').classList.add('hidden'); $('result').classList.remove('hidden'); $('resultMark').textContent=solved?'CASE SOLVED':'CASE UNSOLVED'; $('resultTitle').textContent=solved?'사건 해결':'수사 종료'; $('resultText').textContent=solved?'정답입니다. 당신은 사건의 진실을 밝혀냈습니다.':`응답 기회를 모두 사용했습니다. 정답은 “${answer}”입니다.`; $('resultMark').style.color=solved?'var(--lime)':'var(--red)'; }
+    function finish(solved){ finished=true; $('guessForm').classList.add('hidden'); $('status').textContent=''; $('dots').classList.add('hidden'); $('result').classList.remove('hidden'); $('resultMark').textContent=solved?'CASE SOLVED':'CASE UNSOLVED'; $('resultTitle').textContent=solved?'사건 해결':'수사 종료'; $('resultText').textContent=solved?'정답입니다.':`응답 기회를 모두 사용했습니다. 정답은 “${answer}”입니다.`; $('resultMark').style.color=solved?'var(--lime)':'var(--red)'; }
     function reset(){answer='';finished=false;$('setup').classList.remove('hidden');$('game').classList.add('hidden');$('secret').value='';$('secret').type='password';$('toggleSecret').textContent='SHOW';$('limit').value='3';$('dots').classList.remove('hidden');$('guess').value='';}
     $('cancel').addEventListener('click', reset); $('again').addEventListener('click', reset);
   </script>
 </body>
 </html>
+
 
 
